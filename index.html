@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELOA | 세련된 생활용품</title>
+    <meta name="description" content="ELOA - 당신의 일상에 색을 입히는 프리미엄 디퓨저, 샴푸, 제습제">
+    
+    <!-- Google Fonts: Playfair Display (Serif/Elegant) & Montserrat (Sans-Serif/Modern) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">ELOA</a>
+            <nav class="nav-links">
+                <a href="#new">NEW</a>
+                <a href="#best">BEST</a>
+                <a href="#category">CATEGORY</a>
+                <a href="#about">ABOUT</a>
+            </nav>
+            <div class="nav-icons">
+                <button aria-label="Search" class="icon-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+                <button aria-label="Cart" class="icon-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span class="cart-badge">2</span>
+                </button>
+                <button aria-label="User Profile" class="icon-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="hero-title-line">진승 수빈</span>
+                <span class="hero-title-line highlight-text">결혼 축하해!</span>
+            </h1>
+            <p class="hero-subtitle">엘로아의 감각적인 생활용품으로 평범한 일상을 특별하게.</p>
+            <a href="#shop" class="btn-primary">Shop Now</a>
+        </div>
+        <div class="hero-image-container">
+            <!-- Placeholders for design impact -->
+            <div class="hero-circle color-orange"></div>
+            <div class="hero-circle color-blue"></div>
+            <div class="hero-product">
+                <div class="mock-product">ELOA</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Items Section (Wiggle Wiggle Vibe) -->
+    <section id="best" class="section best-section">
+        <div class="section-header">
+            <h2 class="section-title">Best Sellers</h2>
+            <p class="section-desc">가장 많은 사랑을 받는 ELOA의 시그니처 아이템</p>
+        </div>
+        
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <article class="product-card">
+                <div class="product-image-wrapper bg-yellow">
+                    <span class="badge badge-new">NEW</span>
+                    <button class="btn-wishlist" aria-label="Add to wishlist">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                    <img src="./assets/diffuser.png" alt="엘로아 선셋 디퓨저" class="product-img" />
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">엘로아 선셋 디퓨저</h3>
+                    <p class="product-price">₩ 32,000</p>
+                </div>
+            </article>
+
+            <!-- Product 2 -->
+            <article class="product-card">
+                <div class="product-image-wrapper bg-pink">
+                    <button class="btn-wishlist" aria-label="Add to wishlist">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                    <img src="./assets/shampoo.png" alt="보태니컬 실크 샴푸" class="product-img" />
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">보태니컬 실크 샴푸</h3>
+                    <p class="product-price">₩ 28,000</p>
+                </div>
+            </article>
+
+            <!-- Product 3 -->
+            <article class="product-card">
+                <div class="product-image-wrapper bg-blue">
+                    <button class="btn-wishlist" aria-label="Add to wishlist">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+                    <img src="./assets/dehumidifier.png" alt="프리미엄 에코 제습제" class="product-img" />
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">프리미엄 에코 제습제</h3>
+                    <p class="product-price">₩ 15,000</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="./script.js"></script>
+</body>
+</html>
