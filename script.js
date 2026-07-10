@@ -1,4 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Random Bible Verse Logic
+    const verses = [
+        { text: "Love never", highlight: "fails.", reference: "- 1 Corinthians 13:8 -" },
+        { text: "Done in", highlight: "love.", reference: "- 1 Corinthians 16:14 -" },
+        { text: "Strong and", highlight: "courageous.", reference: "- Joshua 1:9 -" },
+        { text: "He first", highlight: "loved us.", reference: "- 1 John 4:19 -" },
+        { text: "Faith, hope,", highlight: "and love.", reference: "- 1 Corinthians 13:13 -" }
+    ];
+    
+    const randomVerse = verses[Math.floor(Math.random() * verses.length)];
+    const heroTitle = document.getElementById('hero-title');
+    const heroSubtitle = document.getElementById('hero-subtitle');
+    
+    if (heroTitle && heroSubtitle) {
+        heroTitle.innerHTML = `
+            <span class="hero-title-line">${randomVerse.text}</span>
+            <span class="hero-title-line highlight-text">${randomVerse.highlight}</span>
+        `;
+        heroSubtitle.textContent = randomVerse.reference;
+    }
+
     const navbar = document.getElementById('navbar');
     
     // Navbar scroll effect
