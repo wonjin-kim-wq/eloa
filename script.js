@@ -157,7 +157,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // --- Shopping Cart Logic ---
+    
+    // --- Shopping Cart Logic (Local Storage) ---
     const cartOpenBtn = document.getElementById('cart-open-btn');
     const cartCloseBtn = document.getElementById('cart-close');
     const cartSidebar = document.getElementById('cart-sidebar');
@@ -167,18 +168,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartTotalPrice = document.getElementById('cart-total-price');
     const addToCartBtns = document.querySelectorAll('.btn-add-to-cart');
 
-    let cart = [];
+    // Initialize cart from LocalStorage
+    let cart = JSON.parse(localStorage.getItem('eloa_cart')) || [];
+
+    // Save cart to LocalStorage
+    function saveCart() {
+        localStorage.setItem('eloa_cart', JSON.stringify(cart));
+    }
 
     // Open Cart Sidebar
     function openCart() {
-        cartSidebar.classList.add('active');
-        cartOverlay.classList.add('active');
+        if(cartSidebar && cartOverlay) {
+            cartSidebar.classList.add('active');
+            cartOverlay.classList.add('active');
+        }
     }
 
     // Close Cart Sidebar
     function closeCart() {
-        cartSidebar.classList.remove('active');
-        cartOverlay.classList.remove('active');
+        if(cartSidebar && cartOverlay) {
+            cartSidebar.classList.remove('active');
+            cartOverlay.classList.remove('active');
+        }
     }
 
     if (cartOpenBtn) cartOpenBtn.addEventListener('click', openCart);
@@ -187,19 +198,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render Cart
     function renderCart() {
+        if(!cartItemsContainer) return;
+
         cartItemsContainer.innerHTML = '';
         let total = 0;
 
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = '<div class="empty-cart-msg">장바구니가 비어 있습니다.</div>';
-            cartBadge.innerText = '0';
-            cartBadge.style.display = 'none';
-            cartTotalPrice.innerText = '₩ 0';
+            if(cartBadge) {
+                cartBadge.innerText = '0';
+                cartBadge.style.display = 'none';
+            }
+            if(cartTotalPrice) cartTotalPrice.innerText = '₩ 0';
             return;
         }
 
-        cartBadge.innerText = cart.length;
-        cartBadge.style.display = 'flex';
+        if(cartBadge) {
+            cartBadge.innerText = cart.length;
+            cartBadge.style.display = 'flex';
+        }
 
         cart.forEach((item, index) => {
             total += parseInt(item.price);
@@ -217,13 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
             cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHTML);
         });
 
-        cartTotalPrice.innerText = `₩ ${total.toLocaleString()}`;
+        if(cartTotalPrice) cartTotalPrice.innerText = `₩ ${total.toLocaleString()}`;
 
         // Add event listeners to remove buttons
         document.querySelectorAll('.cart-item-remove').forEach(btn => {
             btn.addEventListener('click', function() {
                 const idx = this.getAttribute('data-index');
                 cart.splice(idx, 1);
+                saveCart();
                 renderCart();
             });
         });
@@ -242,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const img = card.getAttribute('data-img');
 
                 cart.push({ name, price, img });
+                saveCart();
                 
                 // Button animation
                 this.classList.add('added');
@@ -257,4 +276,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Cart display
     renderCart();
+
 });
