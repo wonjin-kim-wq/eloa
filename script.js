@@ -155,4 +155,106 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
         observer.observe(card);
     });
+
+
+    // --- Shopping Cart Logic ---
+    const cartOpenBtn = document.getElementById('cart-open-btn');
+    const cartCloseBtn = document.getElementById('cart-close');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartBadge = document.getElementById('cart-badge-count');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalPrice = document.getElementById('cart-total-price');
+    const addToCartBtns = document.querySelectorAll('.btn-add-to-cart');
+
+    let cart = [];
+
+    // Open Cart Sidebar
+    function openCart() {
+        cartSidebar.classList.add('active');
+        cartOverlay.classList.add('active');
+    }
+
+    // Close Cart Sidebar
+    function closeCart() {
+        cartSidebar.classList.remove('active');
+        cartOverlay.classList.remove('active');
+    }
+
+    if (cartOpenBtn) cartOpenBtn.addEventListener('click', openCart);
+    if (cartCloseBtn) cartCloseBtn.addEventListener('click', closeCart);
+    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+
+    // Render Cart
+    function renderCart() {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<div class="empty-cart-msg">장바구니가 비어 있습니다.</div>';
+            cartBadge.innerText = '0';
+            cartBadge.style.display = 'none';
+            cartTotalPrice.innerText = '₩ 0';
+            return;
+        }
+
+        cartBadge.innerText = cart.length;
+        cartBadge.style.display = 'flex';
+
+        cart.forEach((item, index) => {
+            total += parseInt(item.price);
+
+            const cartItemHTML = `
+                <div class="cart-item">
+                    <img src="${item.img}" alt="${item.name}" class="cart-item-img">
+                    <div class="cart-item-details">
+                        <h4 class="cart-item-title">${item.name}</h4>
+                        <p class="cart-item-price">₩ ${parseInt(item.price).toLocaleString()}</p>
+                        <button class="cart-item-remove" data-index="${index}">삭제</button>
+                    </div>
+                </div>
+            `;
+            cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHTML);
+        });
+
+        cartTotalPrice.innerText = `₩ ${total.toLocaleString()}`;
+
+        // Add event listeners to remove buttons
+        document.querySelectorAll('.cart-item-remove').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idx = this.getAttribute('data-index');
+                cart.splice(idx, 1);
+                renderCart();
+            });
+        });
+    }
+
+    // Add to Cart Event
+    addToCartBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const card = this.closest('.product-card') || this.closest('.bento-item');
+            if (card) {
+                const name = card.getAttribute('data-name');
+                const price = card.getAttribute('data-price');
+                const img = card.getAttribute('data-img');
+
+                cart.push({ name, price, img });
+                
+                // Button animation
+                this.classList.add('added');
+                setTimeout(() => {
+                    this.classList.remove('added');
+                }, 500);
+
+                renderCart();
+                openCart();
+            }
+        });
+    });
+
+    // Initialize Cart display
+    renderCart();
 });
