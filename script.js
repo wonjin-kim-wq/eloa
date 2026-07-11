@@ -1,29 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Random Bible Verse Logic
-    const verses = [
-        { text: "Love never", highlight: "fails.", reference: "- 1 Corinthians 13:8 -" },
-        { text: "Done in", highlight: "love.", reference: "- 1 Corinthians 16:14 -" },
-        { text: "Strong and", highlight: "courageous.", reference: "- Joshua 1:9 -" },
-        { text: "He first", highlight: "loved us.", reference: "- 1 John 4:19 -" },
-        { text: "Faith, hope,", highlight: "and love.", reference: "- 1 Corinthians 13:13 -" }
-    ];
-    
-    const randomVerse = verses[Math.floor(Math.random() * verses.length)];
-    const titleLeft = document.getElementById('hero-title-left');
-    const titleRight = document.getElementById('hero-title-right');
-    const heroSubtitle = document.getElementById('hero-subtitle');
-    
-    if (titleLeft && titleRight && heroSubtitle) {
-        titleLeft.textContent = randomVerse.text;
-        titleRight.textContent = randomVerse.highlight;
-        heroSubtitle.textContent = randomVerse.reference;
-    }
 
     // Scroll Expansion Logic
     const scrollContainer = document.getElementById('scroll-hero-container');
     const media = document.getElementById('expanding-media');
     const bg = document.getElementById('scroll-hero-bg');
     const contentBottom = document.getElementById('hero-content-bottom');
+    const titleLeft = document.getElementById('hero-title-left');
+    const titleRight = document.getElementById('hero-title-right');
 
     window.addEventListener('scroll', () => {
         if (scrollContainer && media && titleLeft && titleRight) {
