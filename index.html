@@ -244,9 +244,12 @@
             <button class="event-close" id="event-close">&times;</button>
         </div>
         <div class="event-body">
-            <div class="event-desc" style="margin-bottom: 1.5rem; font-weight: 500;">내 얼굴은 어떤 동물과 닮았을까? 지금 바로 확인해보세요!</div>
-            <button type="button" class="btn-primary" onclick="initEvent()" style="margin-bottom: 1.5rem;">Start</button>
-            <div id="webcam-container" style="display: flex; justify-content: center; margin-bottom: 1rem; border-radius: 12px; overflow: hidden;"></div>
+            <div class="event-desc" style="margin-bottom: 1.5rem; font-weight: 500;">내 얼굴은 어떤 동물과 닮았을까? 정면 사진을 업로드해보세요!</div>
+            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+            <label for="image-upload" class="btn-primary" style="display: inline-block; cursor: pointer; margin-bottom: 1.5rem;">사진 업로드</label>
+            <div id="image-container" style="display: flex; justify-content: center; margin-bottom: 1rem; border-radius: 12px; overflow: hidden; max-height: 250px;">
+                <img id="uploaded-image" style="max-width: 100%; max-height: 250px; display: none; border-radius: 12px; object-fit: contain;" />
+            </div>
             <div id="label-container" style="text-align: center; font-weight: 600; display: flex; flex-direction: column; gap: 0.5rem;"></div>
         </div>
     </div>
@@ -278,11 +281,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
         const EVENT_URL = "./my_model/";
-        let eventModel, eventWebcam, eventLabelContainer, eventMaxPredictions;
-        let eventIsInitialized = false;
+        let eventModel, eventMaxPredictions;
+        let eventLabelContainer = document.getElementById("label-container");
+        let uploadedImage = document.getElementById("uploaded-image");
+        let imageUpload = document.getElementById("image-upload");
 
-        async function initEvent() {
-            if (eventIsInitialized) return;
+        async function loadModel() {
+            if (eventModel) return;
             const modelURL = EVENT_URL + "model.json";
             const metadataURL = EVENT_URL + "metadata.json";
 
@@ -294,7 +299,7 @@
                 // Fallback Mock Model
                 eventModel = {
                     getTotalClasses: () => 3,
-                    predict: async (canvas) => {
+                    predict: async (imageElement) => {
                         return [
                             { className: "🐶 강아지상", probability: 0.50 + (Math.random() * 0.2) },
                             { className: "🐱 고양이상", probability: 0.20 + (Math.random() * 0.1) },
@@ -304,46 +309,40 @@
                 };
                 eventMaxPredictions = eventModel.getTotalClasses();
             }
-
-            try {
-                const flip = true;
-                eventWebcam = new tmImage.Webcam(200, 200, flip);
-                await eventWebcam.setup();
-                await eventWebcam.play();
-                window.requestAnimationFrame(eventLoop);
-
-                document.getElementById("webcam-container").appendChild(eventWebcam.canvas);
-                eventLabelContainer = document.getElementById("label-container");
-                for (let i = 0; i < eventMaxPredictions; i++) {
-                    const labelDiv = document.createElement("div");
-                    labelDiv.style.padding = "0.5rem";
-                    labelDiv.style.backgroundColor = "var(--color-bg)";
-                    labelDiv.style.borderRadius = "8px";
-                    eventLabelContainer.appendChild(labelDiv);
-                }
-                eventIsInitialized = true;
-            } catch(e) {
-                console.error("Webcam setup failed: ", e);
-                alert("웹캠을 시작할 수 없습니다. 권한을 확인해주세요.");
-            }
         }
 
-        async function eventLoop() {
-            if (!eventIsInitialized) return;
-            eventWebcam.update();
-            await eventPredict();
-            window.requestAnimationFrame(eventLoop);
+        if (imageUpload) {
+            imageUpload.addEventListener("change", async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                eventLabelContainer.innerHTML = "<div>분석 중...</div>";
+
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    await loadModel();
+                    
+                    uploadedImage.onload = async () => {
+                        uploadedImage.style.display = "block";
+                        const prediction = await eventModel.predict(uploadedImage);
+                        eventLabelContainer.innerHTML = "";
+                        for (let i = 0; i < eventMaxPredictions; i++) {
+                            const labelDiv = document.createElement("div");
+                            labelDiv.style.padding = "0.5rem";
+                            labelDiv.style.backgroundColor = "var(--color-bg)";
+                            labelDiv.style.borderRadius = "8px";
+                            
+                            const probability = (prediction[i].probability * 100).toFixed(0);
+                            labelDiv.innerHTML = `${prediction[i].className}: ${probability}%`;
+                            eventLabelContainer.appendChild(labelDiv);
+                        }
+                    };
+                    uploadedImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
         }
 
-        async function eventPredict() {
-            const prediction = await eventModel.predict(eventWebcam.canvas);
-            for (let i = 0; i < eventMaxPredictions; i++) {
-                const probability = (prediction[i].probability * 100).toFixed(0);
-                const classPrediction = `${prediction[i].className}: ${probability}%`;
-                eventLabelContainer.childNodes[i].innerHTML = classPrediction;
-            }
-        }
-        
         // Modal Logic
         const eventOpenBtn = document.getElementById('event-open-btn');
         const eventCloseBtn = document.getElementById('event-close');
@@ -360,12 +359,10 @@
             const closeEventModal = () => {
                 eventModal.classList.remove('active');
                 eventOverlay.classList.remove('active');
-                if(eventWebcam && eventIsInitialized) {
-                    eventWebcam.stop();
-                    eventIsInitialized = false;
-                    document.getElementById("webcam-container").innerHTML = '';
-                    eventLabelContainer.innerHTML = '';
-                }
+                uploadedImage.style.display = "none";
+                uploadedImage.src = "";
+                imageUpload.value = "";
+                eventLabelContainer.innerHTML = "";
             };
 
             eventCloseBtn.addEventListener('click', closeEventModal);
