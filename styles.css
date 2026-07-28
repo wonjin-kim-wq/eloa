@@ -1018,3 +1018,80 @@ button {
     width: 100%;
     cursor: pointer;
 }
+
+/* Event Modal (Offcanvas/Popup) */
+.event-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 4000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.event-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.event-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 90%;
+    max-width: 400px;
+    background-color: var(--color-surface);
+    z-index: 4100;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.event-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.event-header {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.event-header h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--color-primary);
+}
+
+.event-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: color 0.3s ease;
+}
+
+.event-close:hover {
+    color: var(--color-text-dark);
+}
+
+.event-body {
+    padding: 2rem;
+    text-align: center;
+    max-height: 80vh;
+    overflow-y: auto;
+}
